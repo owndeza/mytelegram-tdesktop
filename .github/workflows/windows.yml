@@ -1,0 +1,59 @@
+name: Build MyTelegram
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Show compiler
+        shell: cmd
+        run: |
+          cl
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: C:\vcpkg
+          key: vcpkg
+
+      - name: Clone Libraries
+        shell: cmd
+        run: |
+          git clone https://github.com/desktop-app/lib_base.git
+          git clone https://github.com/desktop-app/lib_ui.git
+          git clone https://github.com/desktop-app/cmake.git
+
+      - name: Configure
+        shell: cmd
+        run: |
+          cmake -B build ^
+          -G Ninja ^
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        shell: cmd
+        run: |
+          cmake --build build --parallel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyTelegram
+          path: build
