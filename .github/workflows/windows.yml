@@ -34,7 +34,6 @@ jobs:
         run: |
           git clone https://github.com/desktop-app/lib_base.git
           git clone https://github.com/desktop-app/lib_ui.git
-          git clone https://github.com/desktop-app/cmake.git
 
       - name: Configure
         shell: cmd
