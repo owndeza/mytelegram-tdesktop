@@ -17,11 +17,6 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Show compiler
-        shell: cmd
-        run: |
-          cl
-
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v5
 
